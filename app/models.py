@@ -64,7 +64,7 @@ class Blog(db.Model):
     comment = db.relationship('Comment',backref='post',lazy='dynamic')
     
 
-    def save_pitch(self):
+    def save_blog(self):
         db.session.add(self)
         db.session.commit()
 

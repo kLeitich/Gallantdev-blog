@@ -2,7 +2,7 @@ from flask import render_template,request,redirect,url_for,abort
 from . import main
 from ..models import User,Role,Blog,Comment
 from flask_login import current_user, login_required
-from .forms import  NewComment, UpdateProfile,NewPitch
+from .forms import  NewComment, UpdateProfile,NewBlog
 from .. import db,photos
 
 
@@ -12,8 +12,8 @@ def index():
     '''
     View root page function that returns the index page and its data
     '''
-    blogs = Blog.query.all()
-    return render_template('index.html',blogs=blogs)
+    # blogs = Blog.query.all()
+    return render_template('index.html')
 
 
 
@@ -67,7 +67,7 @@ def new_blog(uname):
     if user is None:
         abort(404)
 
-    form = NewPitch()
+    form = NewBlog()
 
     if form.validate_on_submit():
         category = form.category.data
@@ -144,18 +144,4 @@ def sales():
     return render_template('category/personal.html')
 
 
-# @main.route('/thumbup/<int:id>', methods=['GET', 'POST'])
-# @login_required
-# def thumbup(id):
-#     pitch = Pitch.query.get(id)
-#     if pitch is None:
-#         abort(404)
-#     thumbup = Voteup.query.filter_by(user_id=current_user.id, pitch_id=id).first()
-#     if thumbup is not None:
-#         db.session.delete(thumbup)
-#         db.session.commit()
-#         return redirect(url_for('main.index'))
-#     new_thumbup = Voteup(user_id=current_user.id,pitch_id=id)
-#     db.session.add(new_thumbup)
-#     db.session.commit()
-#     return redirect(url_for('main.index'))
+

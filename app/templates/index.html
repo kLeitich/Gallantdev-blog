@@ -8,28 +8,28 @@
     <body>
     {% block content%}
         <div class="container">
-            <h1>Welcome to 1M-Pitch</h1><hr>
-            <p>The website provide one minute pitches in different categories.</p>
+            <h1>Welcome to Gallant Blog</h1><hr>
+            
             <div class="row">
                 <p>Categories:</p>
                 <div class="col-md-4">
-                    <ul>
+                    <!-- <ul>
                         <a href="category/interview"><li>Interview Pitch</li></a>
                         <a href="category/product"><li>Product Pitch</li></a>
                         <a href="category/sales"><li>Sales Pitch</li></a>
                         <a href="category/promotion"><li>Promotion Pitch</li></a>
                     </ul>
                     
-                    <button type="button" class="btn btn-outline-primary"> <a href="{{url_for('main.new_pitch',uname=current_user.username)}}">Add Pitch</a></button>
+                   
                 </div>
                 <div class="col-md-8">
-                    <h3>Business Pitch</h3><hr>
+                     <h3>Business Pitch</h3><hr>
                     <p>
                         There is no publicly available pitch deck for Slack, but let's assume the company is just starting up:
 
                         The average office worker receives 304 emails per week. They also attend an average of 62 monthly meetings, half of which they consider 'wasted time'. Slack was made to make work more efficient. It organizes conversations by channels and drastically reduces the need for emails or meetings. It's integrated with 100s of productivity tools like Google Docs, Calendars, Email, Dropbox, Zoom... so you can receive automatic notifications and take action without leaving the interface.
                     </p>
-                    <p>Posted by: Kevin</p>
+                    <p>Posted by: Kevin</p> -->
                     
                 </div>
             </div>
@@ -37,12 +37,12 @@
         <div class="container p-4">
           
             <div class="row p-4">
-                <h2>Sample pitches</h2><hr>
+                <!-- <h2>Sample pitches</h2><hr> -->
                 
-            {% for pitch in pitchs%}
+            {% for item in blogs%}
             <div class="card text-center col-md-6 p-4">
               
-                <div class="card-header">
+                <!-- <div class="card-header">
                   {{pitch.category}}
                 </div>
                 <div class="card-body">
@@ -56,7 +56,7 @@
                 </div>
                 <div class="card-footer text-muted">
                   posted on: {{pitch.posted}}
-                </div>
+                </div> -->
                 
             </div>{% endfor  %}
         </div>
