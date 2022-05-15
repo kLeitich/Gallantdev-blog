@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+<!-- {% import 'macros.html' as macro %} -->
+{% import 'bootstrap/wtf.html' as wtf%}
+
+{% block content %}
+    
+    <div class="container">
+        <h1>Comment</h1>
+        <div class="row">
+            <div class="col-md-6"> 
+                <h3>All comments</h3>
+               
+               <ol>
+                   {% for comment in comments %}
+                    <li> 
+                        <p><strong>{{comment.comment}}</strong></p>
+                        <p><em>commented by: {{comment.comment_author}}</em></p>
+                    </li>
+                    {% endfor %}
+               </ol>
+               
+               
+
+
+
+            </div>
+            <div class="col-md-6">
+        
+                {{wtf.quick_form(form)}}
+                
+            </div>
+           
+        </div>
+    </div>
+
+{% endblock%}
