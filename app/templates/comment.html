@@ -15,6 +15,7 @@
                     <li> 
                         <p><strong>{{comment.comment}}</strong></p>
                         <p><em>commented by: {{comment.comment_author}}</em></p>
+                        <button class="btn btn-outline-danger text-center"><a href="{{url_for('main.new_comment',uname=current_user.username)}}">Delete</a></button>
                     </li>
                     {% endfor %}
                </ol>

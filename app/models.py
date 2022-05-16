@@ -69,6 +69,21 @@ class Blog(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    @classmethod
+    def get_all_blog(cls):
+        '''
+        Function that queries the databse and returns all the blogs
+        '''
+        return Blog.query.all()
+
+    @classmethod
+    def get_blogs_by_category(cls,category):
+        '''
+        Function that queries the databse and returns pitches based on the
+        category passed to it
+        '''
+        return Blog.query.filter_by(category= category)
+
     def _repr_(self):
         return f'Blog{self.category}'
 
@@ -94,6 +109,12 @@ class Comment(db.Model):
 
         return comments
 
+    @classmethod
+    def clear_comments(cls):
+        Comment.all_comments.clear()
+
     def _repr_(self):
         return f'Blog{self.comment}'
 
+
+        

@@ -1,3 +1,4 @@
+from app.request import get_qoute
 from flask import render_template,request,redirect,url_for,abort
 from . import main
 from ..models import User,Role,Blog,Comment
@@ -6,14 +7,18 @@ from .forms import  NewComment, UpdateProfile,NewBlog
 from .. import db,photos
 
 
-@main.route('/')
+@main.route('/',methods = ['GET','POST'])
 def index():
 
     '''
     View root page function that returns the index page and its data
     '''
+    qoutes=get_qoute()
+    
     blogs = Blog.query.all()
-    return render_template('index.html',blogs=blogs)
+    user=User.query.all()
+    print(current_user)
+    return render_template('index.html',blogs=blogs,qoutes=qoutes,user=user)
 
 
 
@@ -60,10 +65,10 @@ def update_pic(uname):
     return redirect(url_for('main.profile',uname=uname))
 
 
-@main.route('/blog/<uname>/update',methods = ['GET','POST'])
+@main.route('/blog/<int:blog_id>/update',methods = ['GET','POST'])
 @login_required
-def new_blog(uname):
-    user = User.query.filter_by(username = uname).first()
+def new_blog(blog_id):
+    user = User.query.filter_by(blog_id).first()
     if user is None:
         abort(404)
 
@@ -77,17 +82,17 @@ def new_blog(uname):
         new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent,blogAuthor=blogAuthor)
         
         new_blog.save_blog()
-        return redirect(url_for('main.index',uname=user.username))
+        return redirect(url_for('main.index',blog_id=id))
     
 
    
     return render_template('blog.html',form =form)
 
 
-@main.route('/comment/<uname>/update',methods = ['GET','POST'])
+@main.route('/comment/<int:blog_id>/update',methods = ['GET','POST'])
 @login_required
-def new_comment(uname):
-    user = User.query.filter_by(username = uname).first()
+def new_comment(blog_id):
+    user = User.query.filter_by(blog_id).first()
     if user is None:
         abort(404)
 
@@ -99,7 +104,7 @@ def new_comment(uname):
         new_comment = Comment(comment=comment,comment_author=comment_author)
 
         new_comment.save_comment()
-        return redirect(url_for('main.new_comment',uname=user.username))
+        return redirect(url_for('main.new_comment',blog_id))
 
     comments = Comment.query.all()
     
@@ -107,17 +112,35 @@ def new_comment(uname):
     return render_template('comment.html',form =form,comments=comments)
 
 
-@main.route('/category/story')
+@main.route('/comment/<int:blog_id>/delete',methods = ['GET','POST'])
+@login_required
+def delete_comment(blog_id):
+    user = User.query.filter_by(blog_id).first()
+    if user is None:
+        abort(404)
+
+    else:
+        delete_comment.save_comment()
+        comments = Comment.query.all()
+        return redirect(url_for('main.delete_comment',uname=user.username))
+
+    
+    
+
+    return render_template('comment.html',form =form,comments=comments)
+
+
+@main.route('/story/category')
 def story():
 
     '''
     View root page function that returns the index page and its data
     '''
     
-    return render_template('category/story.html')
+    return render_template('story.html')
 
 
-@main.route('/category/tech')
+@main.route('/tech/category')
 def tech():
 
     '''
@@ -125,25 +148,25 @@ def tech():
     '''
     
     
-    return render_template('category/tech.html')
+    return render_template('tech.html')
 
-@main.route('/category/articles')
+@main.route('/articles/category')
 def articles():
 
     '''
     View root page function that returns the index page and its data
     '''
     
-    return render_template('category/articles.html')
+    return render_template('articles.html')
 
-@main.route('/category/personal')
+@main.route('/personal/category')
 def personal():
 
     '''
     View root page function that returns the index page and its data
     '''
     
-    return render_template('category/personal.html')
+    return render_template('personal.html')
 
 
 
