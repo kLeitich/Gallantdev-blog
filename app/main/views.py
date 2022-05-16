@@ -15,7 +15,7 @@ def index():
     '''
     qoutes=get_qoute()
     
-    blogs = Blog.query.all()
+    blogs = Blog.get_all_blog()
     user=User.query.all()
     print(current_user)
     return render_template('index.html',blogs=blogs,qoutes=qoutes,user=user)
@@ -65,14 +65,16 @@ def update_pic(uname):
     return redirect(url_for('main.profile',uname=uname))
 
 
-@main.route('/blog/<int:blog_id>/update',methods = ['GET','POST'])
+@main.route('/blog/new',methods = ['GET','POST'])
 @login_required
-def new_blog(blog_id):
-    user = User.query.filter_by(blog_id).first()
-    if user is None:
-        abort(404)
+def new_blog():
+    # user = User.query.filter_by(blog_id).first()
+    # if user is None:
+    #     abort(404)
 
     form = NewBlog()
+    # if category is None:
+    #     abort(404)
 
     if form.validate_on_submit():
         category = form.category.data
@@ -82,19 +84,32 @@ def new_blog(blog_id):
         new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent,blogAuthor=blogAuthor)
         
         new_blog.save_blog()
-        return redirect(url_for('main.index',blog_id=id))
+        return redirect(url_for('main.index'))
     
 
    
-    return render_template('blog.html',form =form)
+    return render_template('new_blog.html',form =form)
 
 
-@main.route('/comment/<int:blog_id>/update',methods = ['GET','POST'])
+@main.route('/blog/<int:blog_id>')
+def blog(blog_id):
+
+    '''
+    View pitch page function that returns the pitch details page and its data
+    '''
+    found_blog= Blog.get_all_blog(blog_id)
+    title = blog_id
+    blog_comments = Comment.get_comments(blog_id)
+
+    return render_template('blog.html',title= title ,found_blog= found_blog, blog_comments= blog_comments)
+
+
+@main.route('/blog/comment/<int:blog_id>',methods = ['GET','POST'])
 @login_required
 def new_comment(blog_id):
-    user = User.query.filter_by(blog_id).first()
-    if user is None:
-        abort(404)
+    # user = User.query.filter_by(blog_id).first()
+    # if user is None:
+    #     abort(404)
 
     form = NewComment()
 
@@ -104,30 +119,30 @@ def new_comment(blog_id):
         new_comment = Comment(comment=comment,comment_author=comment_author)
 
         new_comment.save_comment()
-        return redirect(url_for('main.new_comment',blog_id))
+        return redirect(url_for('main.index',blog_id=blog_id))
 
-    comments = Comment.query.all()
+    comments = Comment.get_comments(blog_id)
     
 
     return render_template('comment.html',form =form,comments=comments)
 
 
-@main.route('/comment/<int:blog_id>/delete',methods = ['GET','POST'])
-@login_required
-def delete_comment(blog_id):
-    user = User.query.filter_by(blog_id).first()
-    if user is None:
-        abort(404)
+# @main.route('/comment/<int:blog_id>/delete',methods = ['GET','POST'])
+# @login_required
+# def delete_comment(blog_id):
+#     user = User.query.filter_by(blog_id).first()
+#     if user is None:
+#         abort(404)
 
-    else:
-        delete_comment.save_comment()
-        comments = Comment.query.all()
-        return redirect(url_for('main.delete_comment',uname=user.username))
+#     else:
+#         delete_comment.save_comment()
+#         comments = Comment.query.all()
+#         return redirect(url_for('main.delete_comment',uname=user.username))
 
     
     
 
-    return render_template('comment.html',form =form,comments=comments)
+#     return render_template('comment.html',form =form,comments=comments)
 
 
 @main.route('/story/category')

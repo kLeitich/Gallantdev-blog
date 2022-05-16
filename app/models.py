@@ -22,8 +22,16 @@ class User(UserMixin,db.Model):
     pass_secure = db.Column(db.String(255))
     blogs = db.relationship('Blog',backref = 'users',lazy="dynamic")
 
-    def __repr__(self):
-        return f'User {self.username}'
+    
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls,id):
+        comments = Comment.query.filter_by(blogs_id=id).all()
+        return comments
+
 
     @property
     def password(self):
@@ -36,6 +44,9 @@ class User(UserMixin,db.Model):
 
     def verify_password(self,password):
         return check_password_hash(self.pass_secure,password)
+
+    def __repr__(self):
+        return f'User {self.username}'
 
     
 
@@ -104,13 +115,13 @@ class Comment(db.Model):
         db.session.commit()
 
     @classmethod
-    def get_comments(cls,id):
-        comments = Comment.query.filter_by(blog_id=id).all()
+    def get_comments(cls,blog_id):
+        comments = Comment.query.filter_by(blog_id=blog_id).all()
 
         return comments
 
     @classmethod
-    def clear_comments(cls):
+    def delete_comments(cls):
         Comment.all_comments.clear()
 
     def _repr_(self):

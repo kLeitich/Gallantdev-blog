@@ -26,7 +26,7 @@
           
             <div class="row p-4">
                 <h2>Recent Blogs</h2><hr>
-                <p><button type="button" class="btn btn-outline-primary"> <a href="{{url_for('main.index',blog_id=blog_id)}}">Add Blog</a></button></p>
+                <p><button type="button" class="btn btn-outline-primary"> <a href="{{url_for('main.new_blog')}}">Add Blog</a></button></p>
             {% for item in blogs%}
             <div class="card text-center col-md-6 p-4">
               
@@ -38,7 +38,7 @@
                   <p class="card-text">
                     {{item.blogContent}}
                   </p>
-                  <button class="btn btn-outline-primary text-center"><a href="{{url_for('main.new_comment',blog_id=blog_id)}}">Comments</a></button>
+                  <button class="btn btn-outline-primary text-center"><a href="{{url_for('main.new_comment',blog_id=item.id)}}">Comments</a></button>
                 </div>
                 <div class="card-footer text-muted">
                   posted by: {{item.blogAuthor}}
@@ -46,6 +46,8 @@
                 
             </div>{% endfor  %}
         </div>
+
+        
     {% endblock %}
     </body>
 </html>
