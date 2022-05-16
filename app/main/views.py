@@ -12,8 +12,8 @@ def index():
     '''
     View root page function that returns the index page and its data
     '''
-    # blogs = Blog.query.all()
-    return render_template('index.html')
+    blogs = Blog.query.all()
+    return render_template('index.html',blogs=blogs)
 
 
 
@@ -71,9 +71,10 @@ def new_blog(uname):
 
     if form.validate_on_submit():
         category = form.category.data
+        blogTitle=form.blogTitle.data
         blogContent = form.blogContent.data
         blogAuthor = form.blogAuthor.data
-        new_blog = Blog(category=category,blogContent=blogContent,blogAuthor=blogAuthor)
+        new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent,blogAuthor=blogAuthor)
         
         new_blog.save_blog()
         return redirect(url_for('main.index',uname=user.username))
@@ -107,7 +108,7 @@ def new_comment(uname):
 
 
 @main.route('/category/story')
-def interview():
+def story():
 
     '''
     View root page function that returns the index page and its data
@@ -117,16 +118,17 @@ def interview():
 
 
 @main.route('/category/tech')
-def product():
+def tech():
 
     '''
     View root page function that returns the index page and its data
     '''
     
+    
     return render_template('category/tech.html')
 
 @main.route('/category/articles')
-def promotion():
+def articles():
 
     '''
     View root page function that returns the index page and its data
@@ -135,7 +137,7 @@ def promotion():
     return render_template('category/articles.html')
 
 @main.route('/category/personal')
-def sales():
+def personal():
 
     '''
     View root page function that returns the index page and its data

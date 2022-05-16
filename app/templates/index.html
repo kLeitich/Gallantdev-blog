@@ -8,22 +8,12 @@
     <body>
     {% block content%}
         <div class="container">
-            <h1>Welcome to Gallant Blog</h1><hr>
-            
-            <div class="row">
-                <p>Categories:</p>
-                <div class="col-md-4">
-                    <!-- <ul>
-                        <a href="category/interview"><li>Interview Pitch</li></a>
-                        <a href="category/product"><li>Product Pitch</li></a>
-                        <a href="category/sales"><li>Sales Pitch</li></a>
-                        <a href="category/promotion"><li>Promotion Pitch</li></a>
-                    </ul>
+            <h1 class="text-center">Welcome to Gallant Blog</h1><hr>
                     
-                   
+                    <button type="button" class="btn btn-outline-primary"> <a href="{{url_for('main.new_blog',uname=current_user.username)}}">Add Blog</a></button>
                 </div>
                 <div class="col-md-8">
-                     <h3>Business Pitch</h3><hr>
+                    <!-- <h3>Business Pitch</h3><hr>
                     <p>
                         There is no publicly available pitch deck for Slack, but let's assume the company is just starting up:
 
@@ -37,26 +27,24 @@
         <div class="container p-4">
           
             <div class="row p-4">
-                <!-- <h2>Sample pitches</h2><hr> -->
+                <h2>Recent Blogs</h2><hr>
                 
             {% for item in blogs%}
             <div class="card text-center col-md-6 p-4">
               
-                <!-- <div class="card-header">
-                  {{pitch.category}}
+                <div class="card-header">
+                  {{item.category}}
                 </div>
                 <div class="card-body">
+                    <h5 class="card-title">{{item.blogTitle}} </h5>
                   <p class="card-text">
-                    {{pitch.pitchContent}}
+                    {{item.blogContent}}
                   </p>
-                  <h5 class="card-title">Posted by:{{pitch.pitchAuthor}} </h5>
-                  <button class="btn btn-success float-start"  role="button"><i class="bi bi-hand-thumbs-up"></i>0</button>
-                  <button class="btn btn-danger float-start" role="button"><i class="bi bi-hand-thumbs-down"></i>0</button>
-                  <button class="btn btn-outline-primary float-end"><a href="{{url_for('main.new_comment',uname=current_user.username)}}">Comments</a></button><br><br><br>
+                  <button class="btn btn-outline-primary text-center"><a href="{{url_for('main.new_comment',uname=current_user.username)}}">Comments</a></button>
                 </div>
                 <div class="card-footer text-muted">
-                  posted on: {{pitch.posted}}
-                </div> -->
+                  posted by: {{item.blogAuthor}}
+                </div>
                 
             </div>{% endfor  %}
         </div>
