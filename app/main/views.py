@@ -121,8 +121,8 @@ def new_comment(blog_id):
         new_comment.save_comment()
         return redirect(url_for('main.index',blog_id=blog_id))
 
-    comments = Comment.get_comments(blog_id)
-    
+    comments = Comment.query.filter_by(blog_id=blog_id).all()
+    print(comments)
 
     return render_template('comment.html',form =form,comments=comments)
 

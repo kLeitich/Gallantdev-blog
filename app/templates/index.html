@@ -28,17 +28,19 @@
                 <h2>Recent Blogs</h2><hr>
                 <p><button type="button" class="btn btn-outline-primary"> <a href="{{url_for('main.new_blog')}}">Add Blog</a></button></p>
             {% for item in blogs%}
-            <div class="card text-center col-md-6 p-4">
+            <div class="card text-center  p-4">
               
                 <div class="card-header">
-                  {{item.category}}
+                  <h1>{{item.category}}</h1>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{item.blogTitle}} </h5>
                   <p class="card-text">
                     {{item.blogContent}}
                   </p>
-                  <button class="btn btn-outline-primary text-center"><a href="{{url_for('main.new_comment',blog_id=item.id)}}">Comments</a></button>
+                  <a href="{{url_for('main.new_comment',blog_id=item.id)}}"><button class="btn btn-outline-success text-center">Update Blog</button></a>
+                  <a href="{{url_for('main.new_comment',blog_id=item.id)}}"><button class="btn btn-outline-danger text-center">Delete Blog</button></a>
+                  <a href="{{url_for('main.new_comment',blog_id=item.id)}}"></a><button class="btn btn-outline-primary text-center">Comments</button></a>
                 </div>
                 <div class="card-footer text-muted">
                   posted by: {{item.blogAuthor}}
