@@ -3,7 +3,7 @@ from flask import render_template,request,redirect,url_for,abort
 from . import main
 from ..models import User,Role,Blog,Comment
 from flask_login import current_user, login_required
-from .forms import  NewComment, UpdateProfile,NewBlog
+from .forms import  NewComment, UpdateProfile,NewBlog,EmailSubscription
 from .. import db,photos
 
 
@@ -14,11 +14,11 @@ def index():
     View root page function that returns the index page and its data
     '''
     qoutes=get_qoute()
-    
+    form=EmailSubscription()
     blogs = Blog.get_all_blog()
     user=User.query.all()
     print(current_user)
-    return render_template('index.html',blogs=blogs,qoutes=qoutes,user=user)
+    return render_template('index.html',blogs=blogs,qoutes=qoutes,user=user,form=form)
 
 
 

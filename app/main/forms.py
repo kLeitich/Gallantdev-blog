@@ -43,4 +43,4 @@ class NewComment(FlaskForm):
 
 class EmailSubscription(FlaskForm):
     email = StringField('Your Email Address',validators=[DataRequired(),Email()])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Subscribe')
