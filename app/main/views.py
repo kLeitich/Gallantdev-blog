@@ -119,7 +119,7 @@ def new_comment(blog_id):
         new_comment = Comment(comment=comment,comment_author=comment_author)
 
         new_comment.save_comment()
-        return redirect(url_for('main.index',blog_id=blog_id))
+        return redirect(url_for('main.comment',blog_id=blog_id))
 
     comments = Comment.query.filter_by(blog_id=blog_id).all()
     print(comments)
@@ -127,17 +127,18 @@ def new_comment(blog_id):
     return render_template('comment.html',form =form,comments=comments)
 
 
-# @main.route('/comment/<int:blog_id>/delete',methods = ['GET','POST'])
-# @login_required
-# def delete_comment(blog_id):
-#     user = User.query.filter_by(blog_id).first()
-#     if user is None:
-#         abort(404)
+@main.route('/comment/delete/<int:blog_id>',methods = ['GET','POST'])
+@login_required
+def delete_comment(blog_id):
+    user = User.query.filter_by(blog_id).first()
+    if user is None:
+        abort(404)
 
-#     else:
-#         delete_comment.save_comment()
-#         comments = Comment.query.all()
-#         return redirect(url_for('main.delete_comment',uname=user.username))
+    else:
+        delete_comment()
+        comments = Comment.query.all()
+        print(comments)
+        return redirect(url_for('main.delete_comment',uname=user.username))
 
     
     
