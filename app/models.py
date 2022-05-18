@@ -21,6 +21,7 @@ class User(UserMixin,db.Model):
     profile_pic_path = db.Column(db.String())
     pass_secure = db.Column(db.String(255))
     blogs = db.relationship('Blog',backref = 'users',lazy="dynamic")
+    subscriberss = db.relationship('Subscription',backref = 'users',lazy="dynamic")
 
     
    
@@ -120,4 +121,19 @@ class Comment(db.Model):
         return f'Blog{self.comment}'
 
 
-        
+class Subcription(db.Model):
+    __table__='subcribers'
+
+    id = db.Column(db.Integer,primary_key=True)
+    email = db.Column(db.String(255))
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+
+
+    def save_subscriber(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def _repr_(self):
+        return f'Subcription{self.subscriber}'
+
+    
