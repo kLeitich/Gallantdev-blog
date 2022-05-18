@@ -122,7 +122,7 @@ class Comment(db.Model):
 
 
 class Subcription(db.Model):
-    __table__='subcribers'
+    __tablename__='subcribers'
 
     id = db.Column(db.Integer,primary_key=True)
     email = db.Column(db.String(255))
