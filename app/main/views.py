@@ -1,9 +1,10 @@
-from os import uname
+
+from app.email import mail_new_blog
 from app.request import get_qoute
 from flask import render_template,request,redirect,url_for,abort
 from . import main
-from ..models import User,Role,Blog,Comment
-from flask_login import current_user, login_required
+from ..models import User,Role,Blog,Comment,Subcription
+from flask_login import current_user, login_required, user_logged_in
 from .forms import  NewComment, UpdateProfile,NewBlog,EmailSubscription
 from .. import db,photos
 
@@ -85,11 +86,17 @@ def new_blog():
         blogContent = form.blogContent.data
         user_id=current_user._get_current_object().id
         new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent,user_id=user_id)
-        
         new_blog.save_blog()
+
+        form=EmailSubscription()
+        if form.validate_on_submit():
+            email=form.email.data
+            new_subscriber=Subcription(email=email,user_id=user_id)
+            new_subscriber.save_subscriber()
+        mail_new_blog("Welcome to Gallant Dev Blog","email/new_blog",current_user.email,user=current_user)
         return redirect(url_for('main.index'))
     
-
+    
    
     return render_template('new_blog.html',form =form,user=current_user)
 

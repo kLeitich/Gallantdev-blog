@@ -1,0 +1,12 @@
+Hello {{user.username}}
+
+Welcome to Gallant Dev Blog
+
+Thank you for signing up for Gallant Dev Blog newsletter.
+
+A new blog has been added to the website.
+
+Kind regards,
+
+Kevin Leitich.
+CEO Gallant Dev.

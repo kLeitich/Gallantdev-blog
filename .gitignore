@@ -1,3 +1,10 @@
 virtual/
 __pycache__
 start.sh
+
+
+if form.validate_on_submit():
+            email=form.email.data
+            new_subscriber=Subcription(email=email,user_id=user_id)
+            new_subscriber.save_subscriber()
+        mail_new_blog("Welcome to Gallant Dev Blog","email/new_blog",user_logged_in.email,user=current_user)
