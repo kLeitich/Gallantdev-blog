@@ -21,7 +21,8 @@ class User(UserMixin,db.Model):
     profile_pic_path = db.Column(db.String())
     pass_secure = db.Column(db.String(255))
     blogs = db.relationship('Blog',backref = 'users',lazy="dynamic")
-    subscriberss = db.relationship('Subscription',backref = 'users',lazy="dynamic")
+    comments = db.relationship('Comment',backref = 'users',lazy="dynamic")
+    subscribers = db.relationship('Subcription',backref = 'users',lazy="dynamic")
 
     
    
@@ -37,6 +38,10 @@ class User(UserMixin,db.Model):
 
     def verify_password(self,password):
         return check_password_hash(self.pass_secure,password)
+
+    def get_pic_path(cls,profile_pic_path):
+
+        return User.query.filter_by(profile_pic_path=profile_pic_path)
 
     def __repr__(self):
         return f'User {self.username}'
@@ -64,8 +69,8 @@ class Blog(db.Model):
     blogTitle=db.Column(db.String)
     blogContent = db.Column(db.String)
     posted = db.Column(db.DateTime,default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    blogAuthor=db.Column(db.String)
+    updatedPosted= db.Column(db.DateTime,default=datetime.utcnow)
+    blogAuthor=db.Column(db.Integer, db.ForeignKey('users.id'))
     comment = db.relationship('Comment',backref='post',lazy='dynamic')
     
 
@@ -99,7 +104,6 @@ class Comment(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     comment = db.Column(db.String)
     posted = db.Column(db.DateTime,default=datetime.utcnow)
-    comment_author = db.Column(db.String)
     blog_id = db.Column(db.Integer,db.ForeignKey('blogs.id'))
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
 

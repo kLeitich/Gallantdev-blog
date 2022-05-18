@@ -1,3 +1,4 @@
+from os import uname
 from app.request import get_qoute
 from flask import render_template,request,redirect,url_for,abort
 from . import main
@@ -17,7 +18,9 @@ def index():
     form=EmailSubscription()
     blogs = Blog.get_all_blog()
     user=User.query.all()
-    print(current_user)
+    print(user)
+    # pic=User.query.filter_by(profile_pic_path=profile_pic_path)
+  
     return render_template('index.html',blogs=blogs,qoutes=qoutes,user=user,form=form)
 
 
@@ -50,7 +53,7 @@ def update_profile(uname):
 
         return redirect(url_for('.profile',uname=user.username))
 
-    return render_template('profile/update.html',form =form)
+    return render_template('profile/update.html',form =form,user=user)
 
 
 @main.route('/user/<uname>/update/pic',methods= ['POST'])
@@ -68,7 +71,7 @@ def update_pic(uname):
 @main.route('/blog/new',methods = ['GET','POST'])
 @login_required
 def new_blog():
-    # user = User.query.filter_by(blog_id).first()
+    # user = User.query.filter_by(username=user_id).first()
     # if user is None:
     #     abort(404)
 
@@ -80,8 +83,8 @@ def new_blog():
         category = form.category.data
         blogTitle=form.blogTitle.data
         blogContent = form.blogContent.data
-        blogAuthor = form.blogAuthor.data
-        new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent,blogAuthor=blogAuthor)
+        
+        new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent)
         
         new_blog.save_blog()
         return redirect(url_for('main.index'))
@@ -107,22 +110,22 @@ def blog(blog_id):
 @main.route('/blog/comment/<int:blog_id>',methods = ['GET','POST'])
 @login_required
 def new_comment(blog_id):
-    # user = User.query.filter_by(blog_id).first()
+    # user = User.query.filter_by(user_id).first()
     # if user is None:
     #     abort(404)
-
+    comments = Comment.query.filter_by(blog_id=blog_id).all()
+    print(comments)
     form = NewComment()
 
     if form.validate_on_submit():
         comment= form.commentNew.data
-        comment_author=form.comment_author.data
-        new_comment = Comment(comment=comment,comment_author=comment_author)
+        user_id=current_user._get_current_object().id
+        new_comment = Comment(comment=comment,blog_id=blog_id,user_id=user_id)
 
         new_comment.save_comment()
-        return redirect(url_for('main.comment',blog_id=blog_id))
-
-    comments = Comment.query.filter_by(blog_id=blog_id).all()
-    print(comments)
+        return redirect(url_for('main.new_comment',blog_id=blog_id))
+    
+    
 
     return render_template('comment.html',form =form,comments=comments)
 
@@ -185,4 +188,16 @@ def personal():
     return render_template('personal.html')
 
 
+@main.route('/blog/delete/<int:blog_id>', methods=['GET', 'POST'])
+@login_required
+def delete_blog(blog_id):
+    blog = Blog.query.filter_by(id=blog_id).first()
+    print(blog.blogAuthor)
 
+    if blog.blogAuthor!= current_user:
+         return render_template('fourOwfour.html',message = 'Access denied')
+
+    db.session.delete(blog)
+    db.session.commit()
+
+    return redirect(url_for('main.index'))

@@ -22,16 +22,21 @@
                     <p>Posted by: {{qoutes.author}}</p>
                     
         </div>
-        <div class="container-fluid bg-primary">
+        <section class="newsletter bg-primary">
+            <div class="container">
             <div class="row">
-                <div class="form col-sm-6">
+            <div class="col-sm-12">
+                <div class="content">
+                    <h2>SUBSCRIBE TO OUR NEWSLETTER</h2>
+                <div class="input-group">
                     {{wtf.quick_form(form)}}
                 </div>
-                <div class="text col-sm-6 allign-center">
-                    <p><strong><em>To receive update when a new blog is added, Kindly subcribe</em></strong></p>
                 </div>
             </div>
-        </div>
+            </div>
+            </div>
+            </section>
+        
         <div class="container p-4">
             
           
@@ -50,11 +55,11 @@
                     {{item.blogContent}}
                   </p>
                   <a href="{{url_for('main.new_comment',blog_id=item.id)}}"><button class="btn btn-outline-success text-center">Update Blog</button></a>
-                  <a href="{{url_for('main.new_comment',blog_id=item.id)}}"><button class="btn btn-outline-danger text-center">Delete Blog</button></a>
-                  <a href="{{url_for('main.new_comment',blog_id=item.id)}}"></a><button class="btn btn-outline-primary text-center">Comments</button></a>
+                  <a href="{{url_for('main.delete_blog',blog_id=item.id)}}"><button class="btn btn-outline-danger text-center">Delete Blog</button></a>
+                  <a href="{{url_for('main.new_comment',blog_id=item.id)}}"><button class="btn btn-outline-primary text-center">Comments</button></a>
                 </div>
                 <div class="card-footer text-muted">
-                  posted by: {{item.blogAuthor}}
+                  posted by: {{item.users.username}}
                 </div>
                 
             </div>{% endfor  %}
