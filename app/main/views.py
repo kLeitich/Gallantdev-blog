@@ -83,15 +83,15 @@ def new_blog():
         category = form.category.data
         blogTitle=form.blogTitle.data
         blogContent = form.blogContent.data
-        
-        new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent)
+        user_id=current_user._get_current_object().id
+        new_blog = Blog(category=category,blogTitle=blogTitle,blogContent=blogContent,user_id=user_id)
         
         new_blog.save_blog()
         return redirect(url_for('main.index'))
     
 
    
-    return render_template('new_blog.html',form =form)
+    return render_template('new_blog.html',form =form,user=current_user)
 
 
 @main.route('/blog/<int:blog_id>')
@@ -130,23 +130,38 @@ def new_comment(blog_id):
     return render_template('comment.html',form =form,comments=comments)
 
 
-@main.route('/comment/delete/<int:blog_id>',methods = ['GET','POST'])
-@login_required
-def delete_comment(blog_id):
-    user = User.query.filter_by(blog_id).first()
-    if user is None:
-        abort(404)
-
-    else:
-        delete_comment()
-        comments = Comment.query.all()
-        print(comments)
-        return redirect(url_for('main.delete_comment',uname=user.username))
+# @main.route('/comment/delete/<int:blog_id>',methods = ['GET','POST'])
+# @login_required
+# def delete_comment(blog_id):
+#     # user = User.query.filter_by(blog_id).first()
+#     # if user is None:
+#     #     abort(404)
+#     comments = Comment.query.filter_by(blog_id=blog_id).all()
+#     print(comments)
+#     user_id=user_id.users.username
+#     if current_user==user_id.users.username:
+#         delete_comment()
+#         comments = Comment.query.all()
+#         print(comments)
+#         return redirect(url_for('main.delete_comment',uname=user.username))
 
     
     
 
 #     return render_template('comment.html',form =form,comments=comments)
+main.route('/comment/delete/<int:comment_id>', methods=['GET', 'POST'])
+@login_required
+def delete_comment(comment_id):
+    
+    comments = Comment.query.filter_by(id = comment_id).first()
+    if comments.user != current_user:
+            return render_template('four.html',message = 'Unauthorized Access')
+
+    for comment in comments:
+        db.session.delete(comment)
+        db.session.commit()
+    
+    return redirect(url_for('main.comment',blog_id=comment.blog_id))
 
 
 @main.route('/story/category')
@@ -192,12 +207,44 @@ def personal():
 @login_required
 def delete_blog(blog_id):
     blog = Blog.query.filter_by(id=blog_id).first()
-    print(blog.blogAuthor)
+    
 
-    if blog.blogAuthor!= current_user:
+    if blog.users!= current_user:
          return render_template('fourOwfour.html',message = 'Access denied')
 
     db.session.delete(blog)
     db.session.commit()
 
     return redirect(url_for('main.index'))
+
+
+@main.route('/blog/update/<int:blog_id>', methods=['GET', 'POST'])
+@login_required
+def update_blog(blog_id):
+    blog = Blog.query.filter_by(id=blog_id).first()
+    form = NewBlog()
+
+    if blog.users!= current_user:
+         return render_template('fourOwfour.html',message = 'Access denied')
+    
+
+    if form.validate_on_submit():
+        blog.category = form.category.data
+        blog.blogTitle=form.blogTitle.data
+        blog.blogContent = form.blogContent.data
+        db.session.commit()
+        
+        
+        return redirect(url_for('main.index'))
+    
+    elif request.method=='GET':
+        form.category.data=blog.category 
+        form.blogTitle.data=blog.blogTitle
+        form.blogContent.data=blog.blogContent
+
+
+
+    return render_template('updateblog.html',form=form,blog=blog)
+
+
+
