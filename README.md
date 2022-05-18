@@ -10,8 +10,7 @@
 + [Authors Info](#author)
 
 ## Description
-This is an application in which a user can be autheticated loggined in and create a pitch,vote on a pitch,create a comment or view comments created and stored in the database.
-
+This is an application in which a user can be autheticated loggined in and create a blog, or update there existing blog, they can also comment on there blog and others,but the can only delete there own blog and comments under their own blog only.
 ## Installation 
 ### Requirements
 
