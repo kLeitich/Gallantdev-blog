@@ -1,0 +1,1 @@
+gunicorn web manage:app
